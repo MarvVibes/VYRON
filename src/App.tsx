@@ -419,9 +419,9 @@ export default function App() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-extrabold tracking-tight md:tracking-tighter mb-4 pb-3 max-w-4xl leading-[1.12] bg-gradient-to-b from-white via-white to-gray-500 bg-clip-text text-transparent"
+            className="text-3xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-extrabold tracking-tight md:tracking-tighter mb-5 pb-1 max-w-4xl leading-[1.2] sm:leading-[1.12] bg-gradient-to-b from-white via-white to-gray-500 bg-clip-text text-transparent"
           >
-            The Next-Generation<br />AI Web Design Agency.
+            The Next-Generation <br className="hidden sm:inline" />AI Web Design Agency.
           </motion.h1>
 
           {/* Subheading */}
@@ -429,7 +429,7 @@ export default function App() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-            className="text-base sm:text-lg text-gray-400 mb-8 max-w-2xl font-medium leading-relaxed"
+            className="text-sm sm:text-base md:text-lg text-gray-400/90 mb-8 max-w-2xl font-medium leading-relaxed px-2 sm:px-0"
           >
             We fuse human creativity with advanced artificial intelligence to build
             breathtaking, high-converting websites that elevate your brand and scale
@@ -441,13 +441,13 @@ export default function App() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-            className="flex flex-col sm:flex-row items-center gap-4"
+            className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto max-w-[280px] sm:max-w-none"
           >
-            <button className="flex items-center gap-2 px-6 py-2.5 bg-[#8b5cf6] hover:bg-[#7c3aed] text-white rounded-none text-sm font-semibold transition-all">
+            <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-[#8b5cf6] hover:bg-[#7c3aed] text-white rounded-none text-sm font-semibold transition-all">
               Get in touch
               <ArrowUpRight className="w-4 h-4" />
             </button>
-            <button className="flex items-center gap-2 px-6 py-2.5 bg-transparent border border-white/20 hover:bg-white/10 text-white rounded-none text-sm font-semibold transition-all">
+            <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-transparent border border-white/20 hover:bg-white/10 text-white rounded-none text-sm font-semibold transition-all">
               View services
             </button>
           </motion.div>
