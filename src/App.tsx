@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowUpRight, Blocks, ArrowLeft, ArrowRight, X, Sparkles, Database, ShieldAlert, Cpu, Route, Activity, Zap, Clock, DollarSign, TrendingUp, PieChart, Rocket, Crown, Star, Check, Handshake, ChevronDown } from 'lucide-react';
+import { ArrowUpRight, Blocks, ArrowLeft, ArrowRight, X, Sparkles, Database, ShieldAlert, Cpu, Route, Activity, Zap, Clock, DollarSign, TrendingUp, PieChart, Rocket, Crown, Star, Check, Handshake, ChevronDown, Menu } from 'lucide-react';
 
 const row1Testimonials = [
   {
@@ -284,13 +284,25 @@ const faqData = [
 
 export default function App() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [globalMousePos, setGlobalMousePos] = useState({ x: 0, y: 0 });
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [optScore, setOptScore] = useState(0.0);
   const [activeCaseStudy, setActiveCaseStudy] = useState(0);
   const [isCaseStudyModalOpen, setIsCaseStudyModalOpen] = useState(false);
   const [sliderDirection, setSliderDirection] = useState(0);
   const [isAnnualBilling, setIsAnnualBilling] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const spotlight = document.getElementById('global-spotlight');
+      if (spotlight) {
+        spotlight.style.left = `${e.clientX}px`;
+        spotlight.style.top = `${e.clientY}px`;
+      }
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   const handleNext = () => {
     setSliderDirection(1);
@@ -303,9 +315,6 @@ export default function App() {
   };
   return (
     <div 
-      onMouseMove={(e) => {
-        setGlobalMousePos({ x: e.clientX, y: e.clientY });
-      }}
       className="min-h-screen bg-black text-white selection:bg-purple-500/30 relative font-sans flex flex-col overflow-x-hidden scroll-smooth"
     >
       
@@ -328,11 +337,9 @@ export default function App() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.03)_0%,transparent_70%)]" />
         {/* Interactive Global Cursor Spotlight */}
         <div 
-          className="absolute w-[600px] h-[600px] rounded-full bg-purple-500/5 blur-[120px] transition-all duration-500 ease-out -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-          style={{
-            left: `${globalMousePos.x}px`,
-            top: `${globalMousePos.y}px`
-          }}
+          id="global-spotlight"
+          className="absolute w-[600px] h-[600px] rounded-full bg-purple-500/5 blur-[120px] transition-all duration-75 ease-out -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+          style={{ left: '-1000px', top: '-1000px' }}
         />
       </div>
       {/* Navigation Bar */}
@@ -353,13 +360,41 @@ export default function App() {
           <a href="#" className="hover:text-white transition-colors">Contact</a>
         </div>
 
-        {/* CTA Button */}
-        <div className="hidden sm:block">
-          <button className="px-5 py-2.5 bg-[#8b5cf6] hover:bg-[#7c3aed] text-white text-sm font-semibold rounded-none transition-colors">
-            Book a call
+        {/* CTA Button & Mobile Toggle */}
+        <div className="flex items-center gap-4">
+          <div className="hidden sm:block">
+            <button className="px-5 py-2.5 bg-[#8b5cf6] hover:bg-[#7c3aed] text-white text-sm font-semibold rounded-none transition-colors">
+              Book a call
+            </button>
+          </div>
+          <button 
+            className="md:hidden p-2 text-white hover:text-gray-300 transition-colors"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </nav>
+
+      {/* Mobile Menu Dropdown */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="md:hidden absolute top-[80px] left-0 w-full bg-black/95 backdrop-blur-xl border-b border-white/10 z-50 py-6 px-6 flex flex-col gap-6 shadow-2xl"
+          >
+            <a href="#" className="text-xl font-semibold text-white">Home</a>
+            <a href="#" className="text-xl font-semibold text-gray-400 hover:text-white">About</a>
+            <a href="#" className="text-xl font-semibold text-gray-400 hover:text-white">Blog</a>
+            <a href="#" className="text-xl font-semibold text-gray-400 hover:text-white">Contact</a>
+            <button className="w-full mt-4 py-4 bg-[#8b5cf6] hover:bg-[#7c3aed] text-white text-sm font-semibold transition-colors">
+              Book a call
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Main Hero Content */}
       <main className="flex-1 relative z-10 flex flex-col items-center justify-center text-center pt-8">
@@ -419,13 +454,10 @@ export default function App() {
         </div>
 
         {/* Logos Marquee Section (Centered Capsule, Solid White Background) */}
-        <div className="w-[calc(100%-2rem)] max-w-2xl bg-white text-black py-3 px-6 mb-8 mt-4 z-10 relative border border-gray-100 rounded-none shadow-lg shadow-black/5 mx-auto flex items-center gap-6 justify-between">
-          <p className="text-[10px] sm:text-xs font-bold tracking-wider text-[#64748b] uppercase shrink-0">
+        <div className="w-[calc(100%-2rem)] max-w-2xl bg-white text-black py-4 px-6 mb-8 mt-4 z-10 relative border border-gray-100 rounded-none shadow-lg shadow-black/5 mx-auto flex flex-col gap-4 items-center">
+          <p className="text-[10px] sm:text-xs font-bold tracking-wider text-[#64748b] uppercase text-center w-full">
             Over 50+ business trust us
           </p>
-          
-          {/* Vertical Divider */}
-          <div className="w-px h-5 bg-gray-200 shrink-0" />
 
           {/* Logo Slider Wrapper */}
           <div className="w-full overflow-hidden relative [mask-image:linear-gradient(to_right,transparent,white_15%,white_85%,transparent)]">
@@ -1221,7 +1253,7 @@ export default function App() {
 
           {/* Centered CTA Button */}
           <div className="flex justify-center mt-12 md:mt-16">
-            <button className="flex items-center gap-2.5 px-8 py-4 bg-[#8b5cf6] hover:bg-[#7c3aed] text-white rounded-none text-sm font-bold tracking-wider uppercase transition-all duration-300 hover:scale-105 shadow-xl shadow-purple-500/10 hover:shadow-purple-500/25">
+            <button className="flex items-center gap-2.5 px-6 py-3 bg-[#8b5cf6] hover:bg-[#7c3aed] text-white rounded-none text-sm font-bold tracking-wider uppercase transition-all duration-300 hover:scale-105 shadow-xl shadow-purple-500/10 hover:shadow-purple-500/25">
               Transform Your Workflow
               <ArrowUpRight className="w-4 h-4 stroke-[3]" />
             </button>
@@ -1347,12 +1379,12 @@ export default function App() {
                       </div>
 
                       {/* Main Quote */}
-                      <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 leading-snug tracking-tight font-sans">
+                      <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4 leading-snug tracking-tight font-sans">
                         "{caseStudies[activeCaseStudy].quote}"
                       </h3>
 
                       {/* Paragraph */}
-                      <p className="text-xs sm:text-sm text-gray-400 mb-6 leading-relaxed">
+                      <p className="text-sm sm:text-base text-gray-400 mb-6 leading-relaxed">
                         {caseStudies[activeCaseStudy].description}
                       </p>
 
